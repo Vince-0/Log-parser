@@ -40,18 +40,24 @@ Usage:
 python3 logparser.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
 
 Arguments:
+
   --log        Path to log file(s). Can be specified multiple times and supports wildcards
                Example: --log /var/log/*.log --log /var/log/syslog*
+               
   --keywords   Path to keywords definition file
+  
   --chrono     Optional: Sort all matching lines chronologically across all log files
 
 Keywords File Format:
 -------------------
 The keywords file should contain lines in the format:
-<description>:<keyword>
+
+#description:keyword1 keyword2
 
 Example:
-#Description1:keywords go here
+
+#Description1:keywords to match go here
+
 #Description2:more things to match
 
 Output Format:
