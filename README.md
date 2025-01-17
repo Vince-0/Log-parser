@@ -1,6 +1,8 @@
 LogParser - Log Analysis Tool
 ===================================
 
+Author: https://github.com/Vince-0
+
 This script parses log files to identify and report specific keywords and their associated
 contexts.
 
