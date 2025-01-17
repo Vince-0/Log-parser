@@ -49,10 +49,12 @@ Arguments:
 Keywords File Format:
 -------------------
 The keywords file should contain lines in the format:
-<description>:<keyword>
+
+#description:keyword1 keyword2
 
 Example:
-#Description1:keywords go here
+
+#Description1:keywords to match go here
 #Description2:more things to match
 
 Output Format:
