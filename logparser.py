@@ -6,6 +6,8 @@ LogParser - Network Log Analysis Tool
 This script parses network log files to identify and report specific keywords and their associated
 contexts.
 
+USE AT YOUR OWN RISK
+
 Features:
 ---------
 - Multiple log file support: Can process multiple log files in a single run
