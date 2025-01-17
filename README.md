@@ -13,6 +13,26 @@ Features:
 - Error handling: Validates file existence and permissions before processing
 - Chronological sorting: Optional strict chronological sorting across all log files combined
 
+
+Advanced Features:
+----------------
+1. Timestamp Parsing:
+   Supports multiple timestamp formats commonly found in system logs:
+   - Detailed formats with milliseconds: 2025-01-15 23:39:16,366 GMT+0000
+   - ISO 8601: 2025-01-15T23:39:16.366Z
+   - Syslog format: Jan 15 23:39:16
+   - Apache/NGINX: 15/Jan/2025:23:39:16 +0000
+   - Unix date: Wed Jan 15 23:39:16 2025
+   - Alternative formats: 2025/01/15 23:39:16, 15-Jan-2025 23:39:16
+   - Short formats (assumes current year): Jan 15 23:39:16
+   - Unix timestamps: 1579127956
+
+2. Output Formatting:
+   - File name displayed when first match is found in each file
+   - Clear separation between matches using horizontal lines
+   - Structured output with description and log entry pairs
+   - Optional chronological sorting across all input files
+
 Usage:
 ------
 python3 logparser.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
@@ -22,6 +42,15 @@ Arguments:
                Example: --log /var/log/*.log --log /var/log/syslog*
   --keywords   Path to keywords definition file
   --chrono     Optional: Sort all matching lines chronologically across all log files
+
+Keywords File Format:
+-------------------
+The keywords file should contain lines in the format:
+<description>:<keyword>
+
+Example:
+#Description1:keywords go here
+#Description2:more things to match
 
 Output Format:
 -------------
