@@ -37,16 +37,21 @@ Advanced Features:
 
 Usage:
 ------
-python3 logparser.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
+python3 logparser8.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
 
 Arguments:
 
-  --log        Path to log file(s). Can be specified multiple times and supports wildcards
-               Example: --log /var/log/*.log --log /var/log/syslog*
-               
-  --keywords   Path to keywords definition file
+  --log        
   
-  --chrono     Optional: Sort all matching lines chronologically across all log files
+  Path to log file(s). Can be specified multiple times and supports wildcards
+               Example: --log /var/log/*.log --log /var/log/syslog\*
+               
+  --keywords   
+  
+  Path to keywords definition file
+  --chrono     
+  
+  Optional: Sort all matching lines chronologically across all log files
 
 Keywords File Format:
 -------------------
