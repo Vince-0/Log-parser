@@ -15,7 +15,7 @@ Features:
 
 Usage:
 ------
-python3 logparser8.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
+python3 logparser.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
 
 Arguments:
   --log        Path to log file(s). Can be specified multiple times and supports wildcards
