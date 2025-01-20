@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """
 LogParser - Log Analysis Tool
-Author: https://github.com/Vince-0
 ===================================
-
+Author: https://github.com/Vince-0
 This script parses log files to identify and report specific keywords and their associated
 contexts.
 
@@ -15,7 +14,6 @@ Features:
 - Flexible input: Handles various log file formats
 - Error handling: Validates file existence and permissions before processing
 - Chronological sorting: Optional strict chronological sorting across all log files combined
-
 
 Advanced Features:
 ----------------
@@ -35,26 +33,28 @@ Advanced Features:
    - Clear separation between matches using horizontal lines
    - Structured output with description and log entry pairs
    - Optional chronological sorting across all input files
+   - Optional matched lines output only without readability formatting
+   - Optional keyword matches into csv output files
 
 Usage:
 ------
 python3 logparser.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
 
 Arguments:
-  --log        Path to log file(s). Can be specified multiple times and supports wildcards
-               Example: --log /var/log/*.log --log /var/log/syslog*
-  --keywords   Path to keywords definition file
-  --chrono     Optional: Sort all matching lines chronologically across all log files
+  --log          Path to log file(s). Can be specified multiple times and supports wildcards
+                 Example: --log /var/log/*.log --log /var/log/syslog*
+  --keywords     Path to keywords definition file
+  --chrono       Optional: Sort all matching lines chronologically across all log files
+  --matchonly    Optional: Output only the matched log lines without formatting
+  --keywordfiles Optional: Output matches for each keyword to separate CSV files
 
 Keywords File Format:
 -------------------
 The keywords file should contain lines in the format:
-
-#description:keyword1 keyword2
+<description>:<keyword>
 
 Example:
-
-#Description1:keywords to match go here
+#Description1:keywords go here
 #Description2:more things to match
 
 Output Format:
@@ -67,7 +67,7 @@ Standard Output:
    - Complete log line containing the keyword
    - Separator line for clarity
 
-Chronological Output (--chrono):
+Chronological Output - optional (--chrono):
 1. All matches from all input files are merged and sorted by timestamp
 2. File source is shown for each match
 3. For each match in time order:
@@ -76,6 +76,14 @@ Chronological Output (--chrono):
    - Separator line
 4. Lines without valid timestamps are treated as earliest possible time
 5. Strict chronological order is maintained across all input files
+
+Keyword Output - optional (--keywordfiles):
+Creates separate CSV files for each keyword matched:
+
+#Keyword1_matches.csv
+#Keyword2_matches.csv
+
+Each file contains only the lines matching that specific keyword
 
 Error Handling:
 --------------
@@ -102,6 +110,8 @@ def parse_arguments():
     parser.add_argument("--log", action="append", help="Path to log file (supports wildcards)", required=True)
     parser.add_argument("--keywords", help="Path to keywords file", required=True)
     parser.add_argument("--chrono", action="store_true", help="Sort matches chronologically")
+    parser.add_argument("--matchonly", action="store_true", help="Output only matched log lines")
+    parser.add_argument("--keywordfiles", action="store_true", help="Output matches for each keyword to separate CSV files")
     return parser.parse_args()
 
 def expand_log_paths(log_patterns):
@@ -131,16 +141,38 @@ def read_keywords(keywords_file):
 
 def parse_timestamp(line):
     """
-    Parse timestamp from log line, focusing on the exact format found in the logs:
-    2025-01-16 07:01:46,964 GMT+0000
+    Parse timestamp from log line.
+    Returns datetime object if successful, None if no timestamp found.
     """
     try:
-        # Extract timestamp before GMT
-        timestamp_part = line.split(" GMT")[0]
-        # Convert comma to period for milliseconds
-        timestamp_part = timestamp_part.replace(",", ".")
-        # Parse the timestamp
-        return datetime.datetime.strptime(timestamp_part, "%Y-%m-%d %H:%M:%S.%f")
+        # CSV style dd/MM/yyyy HH:mm:ss tt format
+        if ',' in line:
+            parts = line.split(',')
+            if len(parts) >= 4:  # Connected field is the 4th column
+                timestamp_str = parts[3].strip()
+                return datetime.datetime.strptime(timestamp_str, "%d/%m/%Y %I:%M:%S %p")
+        
+        # Standard log formats
+        formats = [
+            "%Y-%m-%d %H:%M:%S,%f",          # 2025-01-15 23:39:16,366
+            "%Y-%m-%dT%H:%M:%S.%fZ",         # 2025-01-15T23:39:16.366Z
+            "%b %d %H:%M:%S %Y",             # Jan 15 23:39:16 2025
+            "%d/%b/%Y:%H:%M:%S %z",          # 15/Jan/2025:23:39:16 +0000
+            "%a %b %d %H:%M:%S %Y",          # Wed Jan 15 23:39:16 2025
+            "%Y/%m/%d %H:%M:%S",             # 2025/01/15 23:39:16
+            "%d-%b-%Y %H:%M:%S",             # 15-Jan-2025 23:39:16
+            "%b %d %H:%M:%S",                # Jan 15 23:39:16
+        ]
+        
+        # Try each format
+        first_part = ' '.join(line.split()[:6])
+        for fmt in formats:
+            try:
+                return datetime.datetime.strptime(first_part, fmt)
+            except ValueError:
+                continue
+                
+        return None
     except (ValueError, IndexError):
         return None
 
@@ -176,12 +208,34 @@ def collect_matches(log_files, keyword_comment_map):
     matches.sort(key=lambda x: x['timestamp'])
     return matches
 
-def search_log_files(log_files, keyword_comment_map, chronological=False):
+def search_log_files(log_files, keyword_comment_map, chronological=False, matchonly=False, keywordfiles=False):
     """
     Search log files for keywords and output matches.
     If chronological is True, sort all matches by timestamp before output.
+    If matchonly is True, only output the matched log lines.
+    If keywordfiles is True, output matches for each keyword to separate CSV files.
     """
-    if chronological:
+    if keywordfiles:
+        matches = collect_matches(log_files, keyword_comment_map)
+        write_keyword_files(matches, keyword_comment_map)
+        return
+
+    if matchonly:
+        if chronological:
+            matches = collect_matches(log_files, keyword_comment_map)
+            for match in matches:
+                print(match['line'])
+        else:
+            for log_file in log_files:
+                if not os.path.isfile(log_file) or not os.access(log_file, os.R_OK):
+                    continue
+                with open(log_file, 'r') as f:
+                    for line in f:
+                        line = line.strip()
+                        for keyword in keyword_comment_map:
+                            if keyword in line:
+                                print(line)
+    elif chronological:
         # Collect and sort all matches from all files
         matches = collect_matches(log_files, keyword_comment_map)
         
@@ -222,6 +276,28 @@ def search_log_files(log_files, keyword_comment_map, chronological=False):
                             print(f"Log entry: {line}")
                             print("-" * 80)
 
+def write_keyword_files(matches, keyword_comment_map):
+    """
+    Write matches to separate files for each keyword.
+    """
+    # Create a dictionary to store matches for each keyword
+    keyword_matches = {keyword: [] for keyword in keyword_comment_map.keys()}
+    
+    # Collect matches for each keyword
+    for match in matches:
+        for keyword in keyword_comment_map.keys():
+            if keyword in match['line']:
+                keyword_matches[keyword].append(match['line'])
+    
+    # Write each keyword's matches to a separate file
+    for keyword, lines in keyword_matches.items():
+        if lines:  # Only create file if there are matches
+            filename = f"{keyword}_matches.csv"
+            print(f"Writing {len(lines)} matches for keyword '{keyword}' to {filename}")
+            with open(filename, 'w') as f:
+                for line in lines:
+                    f.write(line + '\n')
+
 def main():
     args = parse_arguments()
     log_files = expand_log_paths(args.log)
@@ -230,7 +306,7 @@ def main():
         return
     
     keyword_comment_map = read_keywords(args.keywords)
-    search_log_files(log_files, keyword_comment_map, args.chrono)
+    search_log_files(log_files, keyword_comment_map, args.chrono, args.matchonly, args.keywordfiles)
 
 if __name__ == "__main__":
     main()
