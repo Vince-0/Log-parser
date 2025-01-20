@@ -15,7 +15,6 @@ Features:
 - Error handling: Validates file existence and permissions before processing
 - Chronological sorting: Optional strict chronological sorting across all log files combined
 
-
 Advanced Features:
 ----------------
 1. Timestamp Parsing:
@@ -34,10 +33,12 @@ Advanced Features:
    - Clear separation between matches using horizontal lines
    - Structured output with description and log entry pairs
    - Optional chronological sorting across all input files
+   - Optional matched lines output only without readability formatting
+   - Optional keyword matches into csv output files
 
 Usage:
 ------
-python3 logparser8.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
+python3 logparser.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
 
 Arguments:
 
@@ -53,6 +54,14 @@ Arguments:
   --chrono     
   
   Optional: Sort all matching lines chronologically across all log files
+  
+  --matchonly    Optional: Output only the matched log lines without formatting
+  
+  Optional: Sort all matching lines chronologically across all log files
+  
+  --keywordfiles 
+  
+  Optional: Output matches for each keyword to separate CSV files
 
 Keywords File Format:
 -------------------
