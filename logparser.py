@@ -67,23 +67,11 @@ Standard Output:
    - Complete log line containing the keyword
    - Separator line for clarity
 
-Chronological Output - optional (--chrono):
-1. All matches from all input files are merged and sorted by timestamp
-2. File source is shown for each match
-3. For each match in time order:
-   - Description of the keyword
-   - Complete log line
-   - Separator line
-4. Lines without valid timestamps are treated as earliest possible time
-5. Strict chronological order is maintained across all input files
+Chronological - optional (--chrono): All matches from all input files are merged and sorted by timestamp
 
-Keyword Output - optional (--keywordfiles):
-Creates separate CSV files for each keyword matched:
+Matched lines only - optional (--matchonly): Output only the matched log lines without formatting
 
-#Keyword1_matches.csv
-#Keyword2_matches.csv
-
-Each file contains only the lines matching that specific keyword
+Keyword files in seperated csv files - optional (--keywordfiles): Creates separate CSV files for each keyword matched
 
 Error Handling:
 --------------
