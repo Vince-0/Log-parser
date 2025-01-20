@@ -97,3 +97,8 @@ Dependencies:
 ------------
 - Python 3.x
 - Standard library modules: argparse, os, collections.defaultdict, glob, datetime
+
+To Do:
+------------
+- Add local timezone stamps
+- Add comment/disable tags to ignore keywords 
