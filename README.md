@@ -49,6 +49,7 @@ Arguments:
   --keywords   
   
   Path to keywords definition file
+  
   --chrono     
   
   Optional: Sort all matching lines chronologically across all log files
