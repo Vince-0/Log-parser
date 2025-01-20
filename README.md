@@ -55,10 +55,10 @@ Arguments:
   
   Optional: Sort all matching lines chronologically across all log files
   
-  --matchonly    Optional: Output only the matched log lines without formatting
+  --matchonly    
   
-  Optional: Sort all matching lines chronologically across all log files
-  
+  Optional: Output only the matched log lines without formatting
+    
   --keywordfiles 
   
   Optional: Output matches for each keyword to separate CSV files
