@@ -40,7 +40,7 @@ Advanced Features:
 
 Usage:
 ------
-python3 logparser.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono]
+python3 logparser.py --log <logfile1> [--log <logfile2> ...] --keywords <keywords_file> [--chrono] [--matchonly] [--keywordfiles]
 
 Arguments:
 
