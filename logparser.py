@@ -17,7 +17,7 @@ Features:
 
 Advanced Features:
 ----------------
--Supports multiple timestamp formats commonly found in system logs:
+- Supports multiple timestamp formats commonly found in system logs:
    - Detailed formats with milliseconds: 2025-01-15 23:39:16,366 GMT+0000
    - ISO 8601: 2025-01-15T23:39:16.366Z
    - Syslog format: Jan 15 23:39:16
@@ -27,7 +27,7 @@ Advanced Features:
    - Short formats (assumes current year): Jan 15 23:39:16
    - Unix timestamps: 1579127956
 
--Output Formatting:
+- Output Formatting:
    - List of loaded keywords and their descriptions
    - File name displayed when first match is found in each file
    - For each matched keyword:
