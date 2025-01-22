@@ -29,12 +29,15 @@ Advanced Features:
    - Unix timestamps: 1579127956
 
 2. Output Formatting:
+   - List of loaded keywords and their descriptions
    - File name displayed when first match is found in each file
-   - Clear separation between matches using horizontal lines
-   - Structured output with description and log entry pairs
+   - For each matched keyword:
+     - Description of the keyword
+     - Complete log line containing the keyword
+     - Separator line for clarity
    - Optional chronological sorting across all input files
    - Optional matched lines output only without readability formatting
-   - Optional keyword matches into csv output files
+   - Optional keyword matches into individual csv output files
 
 Usage:
 ------
@@ -74,22 +77,6 @@ Example:
 #Description1:keywords to match go here
 
 #Description2:more things to match
-
-Output Format:
--------------
-Standard Output:
-1. List of loaded keywords and their descriptions
-2. File name on first match in each file
-3. For each matched keyword:
-   - Description of the keyword
-   - Complete log line containing the keyword
-   - Separator line for clarity
-
-Chronological - optional (--chrono): All matches from all input files are merged and sorted by timestamp
-
-Matched lines only - optional (--matchonly): Output only the matched log lines without formatting
-
-Keyword files in seperated csv files - optional (--keywordfiles): Creates separate CSV files for each keyword matched
 
 Error Handling:
 --------------
