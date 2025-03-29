@@ -8,6 +8,7 @@ Author: https://github.com/Vince-0/Projects
 
 Features:
 ---------
+- Input keywords with comments and match it against log entries
 - Multiple log file support: Can process multiple log files in a single run
 - Wildcard support: Accepts * wildcard patterns for log file paths
 - Keyword mapping: Uses a separate keywords file to map keywords to their descriptions
