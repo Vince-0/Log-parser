@@ -1,10 +1,10 @@
 LogParser - Log Analysis Tool
 ===================================
 
-Author: https://github.com/Vince-0
-
-This script parses log files to identify and report specific keywords and their associated
+Python script to parse log files to identify and report specific keywords and their associated
 contexts.
+
+Author: https://github.com/Vince-0
 
 Features:
 ---------
@@ -92,5 +92,5 @@ Dependencies:
 
 To Do:
 ------------
-- Add local timezone stamps
+- Add local timezone stamp calculation
 - Add comment/disable tags to ignore keywords 
