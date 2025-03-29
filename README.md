@@ -4,7 +4,7 @@ LogParser - Log Analysis Tool
 Python script to parse log files to identify and report specific keywords and their associated
 contexts.
 
-Author: https://github.com/Vince-0
+Author: https://github.com/Vince-0/Projects
 
 Features:
 ---------
