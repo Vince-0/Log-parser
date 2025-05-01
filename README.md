@@ -1,4 +1,4 @@
-LogParser - Log Analysis Tool
+Log Parser - Log Analysis Tool
 ===================================
 
 Python script to parse log files to identify and report specific keywords and their associated
